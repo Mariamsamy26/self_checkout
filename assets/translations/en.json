@@ -132,5 +132,8 @@
     "clear": "Clear",
     "station_id": "Station #03",
     "ready_to_scan": "Ready to Scan",
-    "subtotal": "Subtotal"
+    "subtotal": "Subtotal",
+    "alert": "Alert",
+    "something_wrong_happened": "Something went wrong, please try again",
+    "login_failed": "Login failed, please check your credentials"
 }

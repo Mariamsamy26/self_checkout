@@ -388,24 +388,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   SizedBox(width: 10.w),
-
-                  // Settings Button
-                  Material(
-                    color: Colors.white.withValues(alpha: 0.15),
-                    shape: const CircleBorder(),
-                    child: InkWell(
-                      customBorder: const CircleBorder(),
-                      onTap: () => _openHardwareSetup(context),
-                      child: Padding(
-                        padding: EdgeInsets.all(8.r),
-                        child: Icon(
-                          Icons.settings_rounded,
-                          color: Colors.white,
-                          size: 22.sp,
-                        ),
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ],
@@ -479,9 +461,10 @@ class _HomeScreenState extends State<HomeScreen> {
               icon: Icons.payment_rounded,
               height: 64.h,
               gradient: provider.cartItems.isNotEmpty ? bluBiteGradient : null,
-              onPressed: provider.cartItems.isNotEmpty
-                  ? () => _handleCheckout(context, provider)
-                  : null,
+              onPressed:
+                  provider.cartItems.isNotEmpty
+                      ? () => _handleCheckout(context, provider)
+                      : null,
             ),
           ),
         ],
@@ -553,9 +536,10 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Screenshot(
           controller: screenshotController,
           child: Directionality(
-            textDirection: context.locale.languageCode == 'ar'
-                ? TextDirection.rtl
-                : TextDirection.ltr,
+            textDirection:
+                context.locale.languageCode == 'ar'
+                    ? TextDirection.rtl
+                    : TextDirection.ltr,
             child: Container(
               width: 320,
               padding: const EdgeInsets.all(14),
@@ -591,8 +575,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       const Spacer(),
                       Text(
-                        ez.DateFormat('dd/MM/yyyy HH:mm').format(DateTime.now()),
-                        style: const TextStyle(fontSize: 11, color: Colors.black),
+                        ez.DateFormat(
+                          'dd/MM/yyyy HH:mm',
+                        ).format(DateTime.now()),
+                        style: const TextStyle(
+                          fontSize: 11,
+                          color: Colors.black,
+                        ),
                       ),
                     ],
                   ),
@@ -605,12 +594,18 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           Text(
                             '${product.selectedQty.toInt()}x ',
-                            style: const TextStyle(fontSize: 11, color: Colors.black),
+                            style: const TextStyle(
+                              fontSize: 11,
+                              color: Colors.black,
+                            ),
                           ),
                           Expanded(
                             child: Text(
                               product.nameAr ?? product.name ?? '',
-                              style: const TextStyle(fontSize: 11, color: Colors.black),
+                              style: const TextStyle(
+                                fontSize: 11,
+                                color: Colors.black,
+                              ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -619,7 +614,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           Text(
                             ((product.listPrice ?? 0) * product.selectedQty)
                                 .toStringAsFixed(2),
-                            style: const TextStyle(fontSize: 11, color: Colors.black),
+                            style: const TextStyle(
+                              fontSize: 11,
+                              color: Colors.black,
+                            ),
                           ),
                         ],
                       ),

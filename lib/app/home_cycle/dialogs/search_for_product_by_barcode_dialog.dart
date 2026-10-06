@@ -1,11 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gosmart_self_checkout/app/home_cycle/models/product_by_barcode.dart';
 import 'package:gosmart_self_checkout/app/home_cycle/providers/orders_provider.dart';
+import 'package:gosmart_self_checkout/helpers/api_helper.dart';
 import 'package:gosmart_self_checkout/helpers/navigation_helper.dart';
 import 'package:gosmart_self_checkout/styles/colors.dart';
 import 'package:gosmart_self_checkout/styles/text_style.dart';
 import 'package:gosmart_self_checkout/widget/buttons.dart';
+import 'package:gosmart_self_checkout/widget/error_dialog_api.dart';
 import 'package:provider/provider.dart';
 
 class SearchForProductByBarcodeDialog extends StatefulWidget {
@@ -36,17 +39,34 @@ class _SearchForProductByBarcodeDialogState
     });
   }
 
-  void _submitBarcode() async {
+  Future<void> _submitBarcode() async {
     if (_barcode.trim().isEmpty) return;
 
-    Navigation().showLoadingGifDialog(context);
-    await context.read<OrdersProvider>().getProductDetailsByBarcode(
-      _barcode.trim(),
+    FocusScope.of(context).unfocus();
+    final barcodeToSearch = _barcode.trim();
+
+    await ApiHelper.runApiWithLoading<ProductByBarcode?>(
+      context: context,
+      request: () => context
+          .read<OrdersProvider>()
+          .getProductDetailsByBarcode(barcodeToSearch),
+      onSuccess: (result) {
+        if (result != null &&
+            result.status == 1 &&
+            (result.data?.isNotEmpty ?? false)) {
+          Navigation().closeDialog(context); // Close search dialog
+        } else {
+          showDialog(
+            context: context,
+            builder: (_) => ErrorDialog(
+              message: result?.message?.isNotEmpty == true
+                  ? result!.message!
+                  : 'product_not_found'.tr(),
+            ),
+          );
+        }
+      },
     );
-    if (mounted) {
-      Navigation().closeDialog(context); // Close loading
-      Navigation().closeDialog(context); // Close search dialog
-    }
   }
 
   @override

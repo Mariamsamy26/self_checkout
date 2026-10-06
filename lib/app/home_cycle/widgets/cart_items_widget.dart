@@ -30,29 +30,18 @@ class CartItemsWidget extends StatelessWidget {
                     color: coralOrangeLight.withValues(alpha: 0.5),
                     shape: BoxShape.circle,
                   ),
-                  child: Image.asset(
-                    'assets/images/EmptyState.png',
-                    width: 90.w,
-                    height: 90.w,
-                    fit: BoxFit.contain,
-                  ),
+                  child: Icon(Icons.shopping_cart, size: 45.r, color: textDark),
                 ),
                 SizedBox(height: 14.h),
                 Text(
                   'cart_empty'.tr(),
-                  style: boldText.copyWith(
-                    color: textDark,
-                    fontSize: 22.sp,
-                  ),
+                  style: boldText.copyWith(color: textDark, fontSize: 22.sp),
                 ),
                 SizedBox(height: 6.h),
                 Text(
                   'scan_or_search'.tr(),
                   textAlign: TextAlign.center,
-                  style: smallText.copyWith(
-                    color: textMuted,
-                    fontSize: 15.sp,
-                  ),
+                  style: smallText.copyWith(color: textMuted, fontSize: 15.sp),
                 ),
               ],
             ),
@@ -161,17 +150,19 @@ class CartItemsWidget extends StatelessWidget {
                       Material(
                         color: Colors.transparent,
                         child: InkWell(
-                          onTap: () => context
-                              .read<OrdersProvider>()
-                              .decreaseProductQuantity(item),
+                          onTap:
+                              () => context
+                                  .read<OrdersProvider>()
+                                  .decreaseProductQuantity(item),
                           borderRadius: BorderRadius.circular(20.r),
                           child: Container(
                             width: 38.w,
                             height: 38.w,
                             decoration: BoxDecoration(
-                              color: product.selectedQty == 1
-                                  ? dangerRedLight
-                                  : Colors.white,
+                              color:
+                                  product.selectedQty == 1
+                                      ? dangerRedLight
+                                      : Colors.white,
                               shape: BoxShape.circle,
                               boxShadow: [
                                 BoxShadow(
@@ -186,9 +177,10 @@ class CartItemsWidget extends StatelessWidget {
                                   ? Icons.delete_outline_rounded
                                   : Icons.remove_rounded,
                               size: 20.sp,
-                              color: product.selectedQty == 1
-                                  ? dangerRed
-                                  : textDark,
+                              color:
+                                  product.selectedQty == 1
+                                      ? dangerRed
+                                      : textDark,
                             ),
                           ),
                         ),
@@ -211,9 +203,10 @@ class CartItemsWidget extends StatelessWidget {
                       Material(
                         color: Colors.transparent,
                         child: InkWell(
-                          onTap: () => context
-                              .read<OrdersProvider>()
-                              .increaseProductQuantity(item),
+                          onTap:
+                              () => context
+                                  .read<OrdersProvider>()
+                                  .increaseProductQuantity(item),
                           borderRadius: BorderRadius.circular(20.r),
                           child: Container(
                             width: 38.w,

@@ -10,17 +10,20 @@ String productByBarcodeToJson(ProductByBarcode data) => json.encode(data.toJson(
 
 class ProductByBarcode {
   int? status;
+  String? message;
   List<Datum>? data;
 
-  ProductByBarcode({this.status, this.data});
+  ProductByBarcode({this.status, this.message, this.data});
 
   factory ProductByBarcode.fromJson(Map<String, dynamic> json) => ProductByBarcode(
     status: json["status"],
+    message: json["message"] ?? json["msg"],
     data: json["data"] == null ? [] : List<Datum>.from(json["data"]!.map((x) => Datum.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
     "status": status,
+    "message": message,
     "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
   };
 }

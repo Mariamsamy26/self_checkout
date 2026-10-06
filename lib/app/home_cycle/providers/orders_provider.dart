@@ -103,27 +103,32 @@ class OrdersProvider with ChangeNotifier {
 
   //* //* FUNCTIONS
 
-  Future<void> getProductDetailsByBarcode(String productedBarcode) async {
+  Future<ProductByBarcode?> getProductDetailsByBarcode(
+    String productedBarcode,
+  ) async {
     _dataLoaded = false;
-    //*
     notifyListeners();
-    //*
-    _productByBarcode =
-        (await OrdersApis().getProductDetailsByBarcode(
-          productedBarcode,
-          branchId,
-        ))!;
 
-    //notifyListeners();
-    if (_productByBarcode.data!.isNotEmpty) {
-      addToCart(_productByBarcode);
-    } else {
-      print('product not found');
+    try {
+      final result = await OrdersApis().getProductDetailsByBarcode(
+        productedBarcode,
+        branchId,
+      );
 
-      _productByBarcode.data = [];
+      if (result != null &&
+          result.data != null &&
+          result.data!.isNotEmpty) {
+        _productByBarcode = result;
+        addToCart(_productByBarcode);
+      } else {
+        log('product not found');
+        _productByBarcode = result ?? ProductByBarcode(status: 0, data: []);
+      }
+      return result;
+    } finally {
+      _dataLoaded = true;
+      notifyListeners();
     }
-    _dataLoaded = true;
-    notifyListeners();
   }
 
   void addToCart(ProductByBarcode product) {
@@ -196,27 +201,25 @@ class OrdersProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> submitOrder() async {
-    try {
-      List<CartLine> lines = [];
-      for (var item in _cartItems) {
-        if (item.data != null && item.data!.isNotEmpty) {
-          final prod = item.data!.first;
-          lines.add(
-            CartLine(
-              productId: prod.id ?? 0,
-              productName: prod.nameAr ?? prod.name ?? '',
-              selectedQty: prod.selectedQty,
-            ),
-          );
-        }
+  Future<bool> submitOrder() async {
+    List<CartLine> lines = [];
+    for (var item in _cartItems) {
+      if (item.data != null && item.data!.isNotEmpty) {
+        final prod = item.data!.first;
+        lines.add(
+          CartLine(
+            productId: prod.id ?? 0,
+            productName: prod.nameAr ?? prod.name ?? '',
+            selectedQty: prod.selectedQty,
+          ),
+        );
       }
-      if (lines.isNotEmpty) {
-        await OrdersApis().placeOrder(lines, branchId);
-      }
-    } catch (e) {
-      log('Error submitting order: $e');
     }
+    if (lines.isNotEmpty) {
+      await OrdersApis().placeOrder(lines, branchId);
+      return true;
+    }
+    return false;
   }
 
   //* //* //* //* //* //* //*
